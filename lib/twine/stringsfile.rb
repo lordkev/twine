@@ -139,6 +139,9 @@ module Twine
       dev_lang = @language_codes[0]
 
       File.open(path, 'w:UTF-8') do |f|
+        
+        sections.sort_by! { |section| section.name.downcase }
+        
         @sections.each do |section|
           if f.pos > 0
             f.puts ''
@@ -146,6 +149,8 @@ module Twine
 
           f.puts "[[#{section.name}]]"
 
+          section.rows.sort_by! { |row| row.translations[dev_lang].downcase }
+          
           section.rows.each do |row|
             f.puts "\t[#{row.key}]"
             value = row.translations[dev_lang]
